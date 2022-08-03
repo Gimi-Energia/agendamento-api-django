@@ -24,7 +24,8 @@ class CreateView(generics.ListCreateAPIView):
     def post(self, request: Request, *args, **kwargs):
         must_repeat: Union[bool, None] = request.data.get('must_repeat', None)
         must_repeat = True if must_repeat == 'true' else False
-        repeat_weekday: Union[list[int], None] = request.data.getlist('repeat_weekday', None)
+
+        repeat_weekday: Union[list[int], None] = request.data.get('repeat_weekday', None) if type(request.data) is dict else request.data.getlist('repeat_weekday', None)
 
         change_dict_keyname: Callable[[dict, str, str]] = lambda d, old_k, new_k: {new_k if k == old_k else k:v for k,v in d.items()}
 
