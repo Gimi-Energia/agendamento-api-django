@@ -211,6 +211,18 @@ class DetailsView(generics.RetrieveUpdateDestroyAPIView):
                 code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+    def put(self, request: Request, *args, **kwargs):
+        must_repeat = request.data.get('must_repeat', None)
+        must_repeat = False if must_repeat == 'false' else True
+
+        if must_repeat is False:
+            # TODO: alterar o campo must_repeat da PeriodicAgenda e de todas Agenda iguais a essa para FALSE
+            pass
+
+        # TODO: implementar lógica do POST em CreateView (toggle must_repeat)
+        super(DetailsView, self).save(*args, **kwargs)
+
+
 
 class RefreshAgendaView(views.APIView):
     def _date_for_this_weekday(self, day: int) -> date:
@@ -242,24 +254,23 @@ class RefreshAgendaView(views.APIView):
         if sala_id is not None:
             # reuniões periódicas na sala específica
             agendas: QuerySet[PeriodicAgenda] = agendas.filter(sala=sala_id)
-            for agenda in agendas:
-                repeat_weekdays: list[str] = list(agenda.repeat_weekday)
+            for periodic_agenda in agendas:
+                repeat_weekdays: list[str] = list(periodic_agenda.repeat_weekday)
                 print(repeat_weekdays)
                 for weekday in repeat_weekdays:
-                    print(f'Verificando agenda "{agenda}", dia {weekday}')
+                    print(f'Verificando agenda "{periodic_agenda}", dia {weekday}')
                     this_weekday_date: date = self._date_for_this_weekday(int(weekday))
 
-                    new_date_init = datetime.combine(
-                        this_weekday_date, agenda.time_init
-                    )
-                    new_date_end = datetime.combine(this_weekday_date, agenda.time_end)
+                    new_date_init = datetime.combine(this_weekday_date, periodic_agenda.time_init)
+                    new_date_end = datetime.combine(this_weekday_date, periodic_agenda.time_end)
 
                     agenda_fields = {
-                        "titulo": agenda.titulo,
-                        "sala": agenda.sala,
-                        "created_by": agenda.created_by,
-                        "creator_email": agenda.creator_email,
-                        "creator_department": agenda.creator_department,
+                        'titulo': periodic_agenda.titulo,
+                        'sala': periodic_agenda.sala,
+                        'created_by': periodic_agenda.created_by,
+                        'creator_email': periodic_agenda.creator_email,
+                        'creator_department': periodic_agenda.creator_department,
+
                         # datas desta semana, no mesmo dia da semana e horário.
                         "date_init": new_date_init,
                         "date_end": new_date_end,
@@ -289,19 +300,13 @@ class RefreshAgendaView(views.APIView):
                     )
                     # Agenda.objects.get_or_create()
 
-                    if already_created_on_this_week is True:
-                        print(
-                            f'Agenda "{agenda}" no dia {weekday} já existe nessa semana.\n'
-                        )
+                    if (already_created_on_this_week is True):
+                        print(f'Agenda "{periodic_agenda}" no dia {weekday} já existe nessa semana.\n')
                     else:
                         new_agenda = Agenda(**agenda_fields)
-                        print(
-                            f'Agenda "{agenda}" no dia {weekday} ainda não existe nessa semana, criando uma cópia...'
-                        )
-                        print(
-                            f'Agenda nova criada: "{new_agenda}" | inicio as: {new_agenda.date_init} | ate: {new_agenda.date_end} | email: {new_agenda.creator_email}\n'
-                        )
-                        new_agenda.save(code=agenda.code)
+                        print(f'Agenda "{periodic_agenda}" no dia {weekday} ainda não existe nessa semana, criando uma cópia...')
+                        print(f'Agenda nova criada: "{new_agenda}" | inicio as: {new_agenda.date_init} | ate: {new_agenda.date_end} | email: {new_agenda.creator_email}\n')
+                        new_agenda.save(code=periodic_agenda.code, periodic_agenda=periodic_agenda)
                         created_this_week.append(new_agenda)
 
         return created_this_week if len(created_this_week) > 0 else None
