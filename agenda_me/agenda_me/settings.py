@@ -145,6 +145,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Media files
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = 'mediafiles/'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -179,3 +185,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # HEROKU
 django_heroku.settings(locals())
+
+
+# AWS S3
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_ACCESS_KEY_ID = os.getenv('AWS_S3_ACCESS_KEY_ID')
+AWS_S3_SECRET_ACCESS_KEY = os.getenv('AWS_S3_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_QUERYSTRING_AUTH = False
