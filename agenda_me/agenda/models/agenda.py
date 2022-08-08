@@ -1,8 +1,10 @@
 from copy import copy
+from functools import reduce
+import operator
 import os
 import re
 import time
-from typing import Union
+from typing import Callable, Union
 from unidecode import unidecode
 from datetime import datetime
 
@@ -18,6 +20,7 @@ class Agenda(AgendaBase):
     date_init = models.DateTimeField(blank=False, null=True, verbose_name="Data/Hora de início")
     date_end = models.DateTimeField(blank=True, null=True, verbose_name="Data/Hora de término")
     must_repeat = models.BooleanField(default=False, verbose_name="Reunião se repete?", blank=True)
+    # periodic_agenda = models.ForeignKey(PeriodicAgenda, null=True, blank=True, on_delete=models.SET_NULL)
 
     def send_code_email(self, receiver_email, receiver_name, code):
         """Tenta enviar o email com o código de segurança para a pessoa que agendou"""
@@ -27,6 +30,7 @@ class Agenda(AgendaBase):
         print(f'[!] Code email sended to <{receiver_email}>, from <{mail.sender_email}> at {datetime.now()} [!]')
 
     def save(self, *args, **kwargs):
+        periodic_agenda = kwargs.pop('periodic_agenda', None)
         code = kwargs.pop('code', None)
 
         if(self.duplicado(Agenda) > 0):
