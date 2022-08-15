@@ -22,6 +22,7 @@ from rest_framework_simplejwt.views import (
 from user.views import MyTokenObtainPairView
 
 from departamento.urls import departamento_routes
+from emails.urls import email_routes
 
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     path('sala/', include('salas.urls')),
     path('agenda/', include('agenda.urls')),
     path('departamento/', include(departamento_routes.urls)),
+    path('email/', include(email_routes.urls)),
    
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
