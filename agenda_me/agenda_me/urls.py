@@ -17,9 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
     TokenRefreshView,
 )
+from user.views import MyTokenObtainPairView
 
 from departamento.urls import departamento_routes
 
@@ -30,6 +30,6 @@ urlpatterns = [
     path('agenda/', include('agenda.urls')),
     path('departamento/', include(departamento_routes.urls)),
    
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

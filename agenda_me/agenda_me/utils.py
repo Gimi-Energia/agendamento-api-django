@@ -4,6 +4,17 @@ from email.mime.multipart import MIMEMultipart
 
 from typing import Literal, Union
 
+class EMPRESAS:
+    GIMI = 'GIMI'
+    GPB = 'GPB'
+    GBL = 'GBL'
+    GS = 'GS'
+    CHOICES = (
+        (GIMI, 'Gimi'),
+        (GPB, 'GPB'),
+        (GBL, 'GBL'),
+        (GS, 'Gimi Service')
+    )
 
 class MailSender:
     def __init__(self, sender_email: str, password: Union[str, int], sender_email_alias: Union[str, None] = None) -> None:
