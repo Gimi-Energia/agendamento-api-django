@@ -1,4 +1,3 @@
-from django.urls import path
 from departamento.views import DepartmentViewset
 from rest_framework import routers
 

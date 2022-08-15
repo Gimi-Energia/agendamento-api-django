@@ -1,23 +1,586 @@
 [
-  {
-    "model": "departamento.Department",
-    "pk": "1",
-    "fields": {
-      "name": "TI"
-    }
-  },
-  {
-    "model": "departamento.Department",
-    "pk": "2",
-    "fields": {
-      "name": "Administrativo"
-    }
-  },
-  {
-    "model": "departamento.Department",
-    "pk": "3",
-    "fields": {
-      "name": "Diretoria"
-    }
-  }
+	{
+		"model": "departamento.Department",
+		"pk": 1,
+		"fields": {
+			"name": "PRESIDENCIA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 2,
+		"fields": {
+			"name": "PLANEJAMENTO ESTRATEGICO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 3,
+		"fields": {
+			"name": "MARKETING",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 4,
+		"fields": {
+			"name": "P&D",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 5,
+		"fields": {
+			"name": "RH",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 6,
+		"fields": {
+			"name": "DP",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 7,
+		"fields": {
+			"name": "SEGURANCA DO TRABALHO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 8,
+		"fields": {
+			"name": "CONTROLE PATRIMONIAL",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 9,
+		"fields": {
+			"name": "ISO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 10,
+		"fields": {
+			"name": "CONTRATOS ADM",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 11,
+		"fields": {
+			"name": "TECNOLOGIA DA INFORMACAO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 12,
+		"fields": {
+			"name": "TESOURARIA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 13,
+		"fields": {
+			"name": "CONTABILIDADE",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 14,
+		"fields": {
+			"name": "FISCAL",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 15,
+		"fields": {
+			"name": "FATURAMENTO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 16,
+		"fields": {
+			"name": "CONTROLADORIA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 17,
+		"fields": {
+			"name": "CUSTOS",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 18,
+		"fields": {
+			"name": "ORCAMENTOS",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 19,
+		"fields": {
+			"name": "VENDAS",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 20,
+		"fields": {
+			"name": "POS-VENDAS",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 21,
+		"fields": {
+			"name": "GESTAO DE CONTRATOS",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 22,
+		"fields": {
+			"name": "LOGISTICA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 23,
+		"fields": {
+			"name": "ENG. MECANICA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 24,
+		"fields": {
+			"name": "ENG. ELETRICA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 25,
+		"fields": {
+			"name": "COMPRAS",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 26,
+		"fields": {
+			"name": "PROCESSOS INDUSTRIAIS",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 27,
+		"fields": {
+			"name": "PUNCIONADEIRA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 28,
+		"fields": {
+			"name": "GUILHOTINA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 29,
+		"fields": {
+			"name": "DOBRADEIRA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 30,
+		"fields": {
+			"name": "SOLDA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 31,
+		"fields": {
+			"name": "PINTURA",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 32,
+		"fields": {
+			"name": "ESTRUTURACAO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 33,
+		"fields": {
+			"name": "MONTAGEM II",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 34,
+		"fields": {
+			"name": "COMPONENTES",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 35,
+		"fields": {
+			"name": "MONTAGEM I",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 36,
+		"fields": {
+			"name": "ALMOXARIFADO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 37,
+		"fields": {
+			"name": "PCP",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 38,
+		"fields": {
+			"name": "INSPECAO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 39,
+		"fields": {
+			"name": "EXPEDICAO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 40,
+		"fields": {
+			"name": "MANUTENCAO",
+			"company": "GIMI"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 41,
+		"fields": {
+			"name": "ALMOXARIFADO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 42,
+		"fields": {
+			"name": "COMPONENTE ELETRICO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 43,
+		"fields": {
+			"name": "COMPONENTE MECANICO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 44,
+		"fields": {
+			"name": "COMPRAS",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 45,
+		"fields": {
+			"name": "CONTABILIDADE",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 46,
+		"fields": {
+			"name": "CONTRATOS ADM",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 47,
+		"fields": {
+			"name": "CONTROLADORIA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 48,
+		"fields": {
+			"name": "CONTROLE PATRIMONIAL",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 49,
+		"fields": {
+			"name": "CUSTOS",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 50,
+		"fields": {
+			"name": "DP",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 51,
+		"fields": {
+			"name": "ENG. ELETRICA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 52,
+		"fields": {
+			"name": "ENG. MECANICA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 53,
+		"fields": {
+			"name": "EXPEDICAO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 54,
+		"fields": {
+			"name": "FATURAMENTO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 55,
+		"fields": {
+			"name": "FISCAL",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 56,
+		"fields": {
+			"name": "GESTAO DE CONTRATOS",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 57,
+		"fields": {
+			"name": "GESTAO DE PESSOAS",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 58,
+		"fields": {
+			"name": "INSPECAO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 59,
+		"fields": {
+			"name": "ISO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 60,
+		"fields": {
+			"name": "MARKETING",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 61,
+		"fields": {
+			"name": "LOGISTICA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 62,
+		"fields": {
+			"name": "MONT. ELETRICA PESADA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 63,
+		"fields": {
+			"name": "MONT. MECANICA PESADA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 64,
+		"fields": {
+			"name": "ORCAMENTOS",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 65,
+		"fields": {
+			"name": "P&D",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 66,
+		"fields": {
+			"name": "PLANEJAMENTO ESTRATEGICO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 67,
+		"fields": {
+			"name": "POS-VENDAS",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 68,
+		"fields": {
+			"name": "PRESIDENCIA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 69,
+		"fields": {
+			"name": "PROCESSOS INDUSTRIAIS",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 70,
+		"fields": {
+			"name": "SEGURANCA DO TRABALHO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 71,
+		"fields": {
+			"name": "TECNOLOGIA DA INFORMACAO",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 72,
+		"fields": {
+			"name": "TESOURARIA",
+			"company": "GBL"
+		}
+	},
+	{
+		"model": "departamento.Department",
+		"pk": 73,
+		"fields": {
+			"name": "VENDAS",
+			"company": "GBL"
+		}
+	}
 ]
