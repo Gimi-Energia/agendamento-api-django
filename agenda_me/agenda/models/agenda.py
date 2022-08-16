@@ -30,6 +30,8 @@ class Agenda(AgendaBase):
     def save(self, *args, **kwargs):
         if not kwargs.pop('ignore_time_rule', False):
             init_datetime = dateparser.parse(str(self.date_init)).replace(tzinfo=None)
+            print('INICIO DA REUNIAO CRIADA:', init_datetime)
+            print('AGORA SAO:', datetime.now())
             if (init_datetime < datetime.now() + timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
                 raise ValueError('Agende um horário a partir de agora.')
 
