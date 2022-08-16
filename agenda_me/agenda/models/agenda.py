@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.db import models
 from agenda.models.agenda_base import AgendaBase
 from agenda.models.periodic_agenda import PeriodicAgenda
+from emails.models import Email
 from agenda_me.utils import MailSender
 
 from dateutil import parser as dateparser
@@ -19,13 +20,18 @@ class Agenda(AgendaBase):
         """Tenta enviar o email com o código de segurança para a pessoa que agendou"""
 
         mail = MailSender(os.getenv('EMAIL_SENDER_ADDRESS'), os.getenv('EMAIL_SENDER_PASSWORD'), sender_email_alias='Reuniao GIMI <reuniao@gimi.com.br>')
-        mail.send_via_outlook(to=receiver_email, name=receiver_name, code=code)
+        mail.send_via_outlook(
+            to=receiver_email,
+            name=receiver_name,
+            code=code
+        )
         print(f'[!] Code email sended to <{receiver_email}>, from <{mail.sender_email}> at {datetime.now()} [!]')
 
     def save(self, *args, **kwargs):
-        init_datetime = dateparser.parse(str(self.date_init)).replace(tzinfo=None)
-        if (init_datetime < datetime.now() + timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
-            raise ValueError('Agende um horário a partir de agora.')
+        if not kwargs.pop('ignore_time_rule', False):
+            init_datetime = dateparser.parse(str(self.date_init)).replace(tzinfo=None)
+            if (init_datetime < datetime.now() + timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
+                raise ValueError('Agende um horário a partir de agora.')
 
         periodic_agenda = kwargs.pop('periodic_agenda', None)
         code = kwargs.pop('code', None)
@@ -38,7 +44,7 @@ class Agenda(AgendaBase):
         else:
             # Só executar quando o dado está sendo criado no banco
             if not self.id:
-                receiver_email: str = self.creator_email
+                receiver_email: str = self.creator_email.address
                 receiver_name: str = self.created_by
 
                 # Código gerado automaticamente e salvo na instancia.

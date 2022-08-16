@@ -48,12 +48,20 @@ class CreateView(generics.ListCreateAPIView):
         serializer = AgendaSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer_data = deepcopy(serializer.data)
+
         serializer_data = change_dict_keyname(
             old_k="sala", new_k="sala_id", d=serializer_data
         )
         serializer_data = change_dict_keyname(
             old_k="creator_department", new_k="creator_department_id", d=serializer_data
         )
+        serializer_data = change_dict_keyname(
+            old_k="periodic_agenda", new_k="periodic_agenda_id", d=serializer_data
+        )
+        serializer_data = change_dict_keyname(
+            old_k="creator_email", new_k="creator_email_id", d=serializer_data
+        )
+
         headers = self.get_success_headers(serializer.data)
 
         # cria a instância da agenda (sem salvar no banco)
@@ -62,7 +70,7 @@ class CreateView(generics.ListCreateAPIView):
 
         response_data = serializer_data
 
-        if must_repeat is True:
+        if (must_repeat is True or str(must_repeat).upper() == 'TRUE'):
             if (repeat_weekday is None) or (str(None) in repeat_weekday):
                 return Response(
                     status=status.HTTP_400_BAD_REQUEST,
@@ -79,6 +87,7 @@ class CreateView(generics.ListCreateAPIView):
             agenda_data = deepcopy(agenda.__dict__)
             agenda_data.pop("_state", None)
             agenda_data.pop("must_repeat", None)
+            agenda_data.pop("periodic_agenda_id", None)
             agenda_data.update(
                 {
                     "time_init": from_datetime_to_time(
@@ -112,9 +121,11 @@ class CreateView(generics.ListCreateAPIView):
             )
 
         try:
-            agenda.save()
             if periodic_agenda is not None:
-                periodic_agenda.save(code=agenda.code)
+                p = periodic_agenda.save(code=agenda.code)
+                agenda.periodic_agenda = p
+
+            agenda.save()
         except Exception as e:
             raise NotAcceptable(e)
 
@@ -157,7 +168,7 @@ class DetailsView(generics.RetrieveUpdateDestroyAPIView):
         """
 
         code = request.data.get("code", None)
-        must_repeat = request.data.get("must_repeat", None)
+        must_repeat = request.data.get("must_repeat", False)
         agenda_id = kwargs.get("pk", None)
 
         try:
@@ -305,9 +316,12 @@ class RefreshAgendaView(views.APIView):
                     else:
                         new_agenda = Agenda(**agenda_fields)
                         print(f'Agenda "{periodic_agenda}" no dia {weekday} ainda não existe nessa semana, criando uma cópia...')
-                        print(f'Agenda nova criada: "{new_agenda}" | inicio as: {new_agenda.date_init} | ate: {new_agenda.date_end} | email: {new_agenda.creator_email}\n')
-                        new_agenda.save(code=periodic_agenda.code, periodic_agenda=periodic_agenda)
-                        created_this_week.append(new_agenda)
+                        try:
+                            new_agenda.save(code=periodic_agenda.code, periodic_agenda=periodic_agenda, ignore_time_rule=True)
+                            print(f'Agenda nova criada: "{new_agenda}" | inicio as: {new_agenda.date_init} | ate: {new_agenda.date_end} | email: {new_agenda.creator_email}\n')
+                            created_this_week.append(new_agenda)
+                        except Exception as e:
+                            print(f'Erro ao criar cópia da Agenda "{periodic_agenda}" no dia {weekday}')
 
         return created_this_week if len(created_this_week) > 0 else None
 
