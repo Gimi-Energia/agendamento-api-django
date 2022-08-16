@@ -12,7 +12,7 @@ class EmailPagination(PageNumberPagination):
 
 class EmailViewSet(viewsets.ModelViewSet):
     serializer_class = EmailSerializer
-    pagination_class = EmailPagination
+    # pagination_class = EmailPagination
 
     def get_queryset(self):
         user: User = self.request.user
