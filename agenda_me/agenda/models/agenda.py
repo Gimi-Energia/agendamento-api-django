@@ -37,9 +37,10 @@ class Agenda(AgendaBase):
         if not kwargs.pop('ignore_time_rule', False):
             tz = pytz.timezone('America/Sao_Paulo')
             init_datetime = dateparser.parse(str(self.date_init))
-            print('INICIO DA REUNIAO CRIADA (string antes do parser):', self.date_init)
-            print('INICIO DA REUNIAO CRIADA (depois do parser):', init_datetime)
-            print('AGORA SAO:', datetime.now(tz))
+            print('INICIO DA REUNIAO CRIADA (string antes do parser):', self.date_init, type(self.date_init))
+            print('INICIO DA REUNIAO CRIADA (depois do parser):', init_datetime, type(init_datetime))
+            print('AGORA SAO:', datetime.now(tz), type(datetime.now(tz)))
+            print('vai entrar no if?', init_datetime < (datetime.now(tz) - timedelta(minutes=2.5)))
             if (init_datetime < datetime.now(tz) - timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
                 raise ValueError('Agende um horário a partir de agora.')
 
