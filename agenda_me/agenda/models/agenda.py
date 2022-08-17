@@ -1,4 +1,5 @@
 import os
+import pytz
 from datetime import datetime, timedelta
 
 from django.db import models
@@ -7,7 +8,7 @@ from agenda.models.periodic_agenda import PeriodicAgenda
 from emails.models import Email
 from agenda_me.utils import MailSender
 
-from dateutil import parser as dateparser, tz
+from dateutil import parser as dateparser
 
 
 class Agenda(AgendaBase):
@@ -34,11 +35,12 @@ class Agenda(AgendaBase):
 
     def save(self, *args, **kwargs):
         if not kwargs.pop('ignore_time_rule', False):
+            tz = pytz.timezone('America/Sao_Paulo')
             init_datetime = dateparser.parse(str(self.date_init), ignoretz=True)
             print('INICIO DA REUNIAO CRIADA (string antes do parser):', self.date_init)
             print('INICIO DA REUNIAO CRIADA (depois do parser):', init_datetime)
-            print('AGORA SAO:', datetime.now())
-            if (init_datetime < datetime.now() + timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
+            print('AGORA SAO:', datetime.now(tz))
+            if (init_datetime < datetime.now(tz) + timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
                 raise ValueError('Agende um horário a partir de agora.')
 
         periodic_agenda = kwargs.pop('periodic_agenda', None)
