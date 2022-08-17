@@ -13,7 +13,8 @@ class EMPRESAS:
         (GIMI, 'Gimi'),
         (GPB, 'GPB'),
         (GBL, 'GBL'),
-        (GS, 'Gimi Service')
+        (GS, 'Gimi Service'),
+        (None, 'Nenhum')
     )
 
 class MailSender:
