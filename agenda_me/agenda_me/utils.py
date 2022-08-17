@@ -23,12 +23,16 @@ class MailSender:
         self.password = password
         self.sender_email_alias = sender_email_alias
 
-    def __get_default_message(self, receiver_email: str, receiver_name: str, code: str):
+    def __get_default_message(self, receiver_email: str, receiver_name: str, code: str, data: dict):
         """Retorna a mensagem padrão utilizada para o corpo do email."""
         message = MIMEMultipart("alternative")
         message["Subject"] = "GIMI - Seu código de agendamento de reunião."
         message["From"] = self.sender_email_alias or self.sender_email
         message["To"] = receiver_email
+
+        date = data.get('schedule_date_init')
+        time_init = data.get('schedule_date_init')
+        time_end = data.get('schedule_date_end')
 
         html = f"""
         <html>
@@ -40,11 +44,29 @@ class MailSender:
             <body>
                 <div id="container">
                     <p>
-                        Olá, {receiver_name}<br>
-                        Aqui está o número do seu agendamento na sala de reuniões.<br>
+                        Olá, {receiver_name}
+                        <br>
+                        Segue abaixo os dados do seu agendamento:
+                        <br>
+                        <br> 
                     </p>
-                    <h1>{code}</h1>
-                    <p><strong>Somente você</strong> pode utilizá-lo para excluir/cancelar seu agendamento.</p>
+                    <ul>
+                        <li><b>Assunto Reunião:</b> {data.get('schedule_title')}</li>
+                        <li><b>Setor:</b> {data.get('schedule_department')}</li>
+                        <li><b>Data:</b> {date}</li>
+                        <li><b>Hora:</b> {time_init} até {time_end}</li>
+                        <li><b>Código Agendamento:</b> {code}</li>
+                    </ul>
+                    <br>
+                    <h3><b>IMPORTANTE:</b><h3>
+                    <p><b>Em caso de necessidade de cancelamento da reunião, siga os passos abaixo:</b><br></p>
+                    <ol>
+                        <li>Copie o código acima</li>
+                        <li>Vá até a data agendada e marque a opção "Ver Horários Agendados"</li>
+                        <li>Clique no botão EXCLUIR</li>
+                        <li>Se tudo deu certo, você verá a seguinte mensagem na tela: "Agendamento removido com sucesso." (aperte F5 para atualizar a página)</li>
+                    </ol>
+
                 </div>
             </body>
         </html>
@@ -105,7 +127,7 @@ class MailSender:
             message=message.as_string(),
         )
     
-    def send_via_outlook(self, to: str, name: str, code: str, **kwargs) -> None:
+    def send_via_outlook(self, to: str, name: str, code: str, data: dict, **kwargs) -> None:
         '''
             Envia um email com o código de agendamento utilizando o servidor SMTP do Outlook.\n
 
@@ -115,8 +137,9 @@ class MailSender:
         '''
         receiver_email: str = kwargs.get('to', to)
         receiver_name: str = kwargs.get('name', name)
+        msg_data: dict = kwargs.get('data', data)
 
-        message = self.__get_default_message(receiver_email, receiver_name, code)
+        message = self.__get_default_message(receiver_email, receiver_name, code, data=msg_data)
 
         self.__connect_to_smtp_server_and_send_mail(
             server_host='smtp-mail.outlook.com',
