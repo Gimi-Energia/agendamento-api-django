@@ -36,7 +36,7 @@ class Agenda(AgendaBase):
     def save(self, *args, **kwargs):
         if not kwargs.pop('ignore_time_rule', False):
             tz = pytz.timezone('America/Sao_Paulo')
-            init_datetime = dateparser.parse(str(self.date_init), ignoretz=True)
+            init_datetime = dateparser.parse(str(self.date_init))
             print('INICIO DA REUNIAO CRIADA (string antes do parser):', self.date_init)
             print('INICIO DA REUNIAO CRIADA (depois do parser):', init_datetime)
             print('AGORA SAO:', datetime.now(tz))
