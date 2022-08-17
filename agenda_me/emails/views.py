@@ -15,8 +15,7 @@ class EmailViewSet(viewsets.ModelViewSet):
     # pagination_class = EmailPagination
 
     def get_queryset(self):
-        user: User = self.request.user
-        qset = Email.objects.filter(company=user.company)
+        qset = Email.objects.all()
         if (self.request.GET.get('address', None)):
             qset = qset.filter(
                 address__icontains=self.request.GET.get('address')
