@@ -40,7 +40,7 @@ class Agenda(AgendaBase):
             print('INICIO DA REUNIAO CRIADA (string antes do parser):', self.date_init)
             print('INICIO DA REUNIAO CRIADA (depois do parser):', init_datetime)
             print('AGORA SAO:', datetime.now(tz))
-            if (init_datetime < datetime.now(tz) + timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
+            if (init_datetime < datetime.now(tz) - timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
                 raise ValueError('Agende um horário a partir de agora.')
 
         periodic_agenda = kwargs.pop('periodic_agenda', None)
