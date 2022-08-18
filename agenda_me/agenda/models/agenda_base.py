@@ -1,11 +1,12 @@
 import time
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, BaseValidator
 from unidecode import unidecode
 
 from salas.models import Sala
 from departamento.models import Department
 from emails.models import Email
+
 
 class AgendaBase(models.Model):
     titulo = models.CharField(
@@ -13,7 +14,7 @@ class AgendaBase(models.Model):
         max_length=255,
         blank=False,
         unique=False,
-        verbose_name="Título"
+        verbose_name="Assunto",
     )
     sala = models.ForeignKey(Sala, on_delete=models.CASCADE, blank=True, null=True)
     code = models.CharField(max_length=255, editable=False, blank=False, null=True, verbose_name="Código de segurança")
@@ -22,7 +23,7 @@ class AgendaBase(models.Model):
         max_length=100,
         null=False,
         blank=False,
-        verbose_name="Criado por"
+        verbose_name="Seu nome"
     )
     creator_email = models.ForeignKey(Email, on_delete=models.SET_NULL, null=True, blank=False, verbose_name="Email de quem criou")
     creator_department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, verbose_name="Departamento de quem criou")

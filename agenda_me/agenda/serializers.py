@@ -5,6 +5,7 @@ from agenda.models.periodic_agenda import Weekdays
 
 from .models import Agenda, PeriodicAgenda
 
+
 class BaseAgendaSerializer(serializers.ModelSerializer):
     repeat_weekday = serializers.MultipleChoiceField(
         write_only=True,
@@ -21,6 +22,26 @@ class BaseAgendaSerializer(serializers.ModelSerializer):
         abstract = True
         model = Agenda
         fields = '__all__'
+
+    @property
+    def errors(self):
+        """Exibe o verbose_name como nome do campo, ao exibir as mensagens de erro"""
+
+        # get errors
+        errors = super().errors
+        verbose_errors = {}
+
+        # fields = { field.name: field.verbose_name } for each field in model
+        fields = {field.name: field.verbose_name for field in
+                   self.Meta.model._meta.get_fields() if hasattr(field, 'verbose_name')}
+
+        # iterate over errors and replace error key with verbose name if exists
+        for field_name, error in errors.items():
+            if field_name in fields:
+                verbose_errors[str(fields[field_name])] = error
+            else:
+                verbose_errors[field_name] = error
+        return verbose_errors
 
     def create(self, validated_data: dict):
         validated_data.pop('repeat_weekday', None)
