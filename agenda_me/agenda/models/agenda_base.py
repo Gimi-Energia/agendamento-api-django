@@ -9,7 +9,7 @@ from emails.models import Email
 
 class AgendaBase(models.Model):
     titulo = models.CharField(
-        validators=[MinLengthValidator(limit_value=8)],
+        validators=[MinLengthValidator(limit_value=4)],
         max_length=255,
         blank=False,
         unique=False,
