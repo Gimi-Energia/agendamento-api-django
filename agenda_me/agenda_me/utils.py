@@ -1,8 +1,10 @@
-import smtplib, ssl
+import smtplib, ssl, pytz
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 from typing import Literal, Union
+from dateutil import parser as dateparser
+
 
 class EMPRESAS:
     GIMI = 'GIMI'
@@ -30,9 +32,10 @@ class MailSender:
         message["From"] = self.sender_email_alias or self.sender_email
         message["To"] = receiver_email
 
-        date = data.get('schedule_date_init')
-        time_init = data.get('schedule_date_init')
-        time_end = data.get('schedule_date_end')
+        tz = pytz.timezone('America/Sao_Paulo')
+        date = dateparser.parse(data.get('schedule_date_init')).replace(tzinfo=tz).date().strftime('%d-%m-%Y')
+        time_init = dateparser.parse(data.get('schedule_date_init')).replace(tzinfo=tz).time().strftime('%H:%M')
+        time_end =dateparser.parse(data.get('schedule_date_end')).replace(tzinfo=tz).time().strftime('%H:%M')
 
         html = f"""
         <html>
@@ -58,7 +61,7 @@ class MailSender:
                         <li><b>Código Agendamento:</b> {code}</li>
                     </ul>
                     <br>
-                    <h3><b>IMPORTANTE:</b><h3>
+                    <h3><b>IMPORTANTE:</b></h3>
                     <p><b>Em caso de necessidade de cancelamento da reunião, siga os passos abaixo:</b><br></p>
                     <ol>
                         <li>Copie o código acima</li>
