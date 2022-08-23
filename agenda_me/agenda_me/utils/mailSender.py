@@ -2,22 +2,11 @@ import smtplib, ssl, pytz
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from typing import Literal, Union
+from typing import Literal, Union, Callable
 from dateutil import parser as dateparser
 
+from emails.models import Email
 
-class EMPRESAS:
-    GIMI = 'GIMI'
-    GPB = 'GPB'
-    GBL = 'GBL'
-    GS = 'GS'
-    CHOICES = (
-        (GIMI, 'Gimi'),
-        (GPB, 'GPB'),
-        (GBL, 'GBL'),
-        (GS, 'Gimi Service'),
-        (None, 'Nenhum')
-    )
 
 class MailSender:
     def __init__(self, sender_email: str, password: Union[str, int], sender_email_alias: Union[str, None] = None) -> None:
@@ -25,8 +14,42 @@ class MailSender:
         self.password = password
         self.sender_email_alias = sender_email_alias
 
-    def __get_default_message(self, receiver_email: str, receiver_name: str, code: str, data: dict):
-        """Retorna a mensagem padrão utilizada para o corpo do email."""
+
+    def __get_delete_message(self, receiver_email: str, receiver_name: str, code: str, data: dict):
+        """
+            Retorna a mensagem para o corpo do email,
+            indicando que o agendamento foi excluído.
+        """
+
+        message = MIMEMultipart("alternative")
+        message["Subject"] = "GIMI - Seu código de agendamento de reunião."
+        message["From"] = self.sender_email_alias or self.sender_email
+        message["To"] = receiver_email
+
+        html = f"""
+        <html>
+            <head>
+                <style>
+                    p {'{ font-size: 1rem; }'}
+                </style>
+            </head>
+            <body>
+                <div id="container">
+                    Seu agendamento foi excluído com sucesso.
+                </div>
+            </body>
+        </html>
+        """
+        message.attach(MIMEText(html, "html"))
+
+        return message
+        
+
+    def __get_info_message(self, receiver_email: str, receiver_name: str, code: str, data: dict):
+        """
+            Retorna a mensagem para o corpo do email,
+            indicando as informações do agendamento.
+        """
         message = MIMEMultipart("alternative")
         message["Subject"] = "GIMI - Seu código de agendamento de reunião."
         message["From"] = self.sender_email_alias or self.sender_email
@@ -78,6 +101,7 @@ class MailSender:
 
         return message
 
+
     def __connect_to_smtp_server_and_send_mail(
         self,
         server_host: str,
@@ -120,7 +144,7 @@ class MailSender:
         receiver_email: str = kwargs.get('to', to)
         receiver_name: str = kwargs.get('name', name)
 
-        message = self.__get_default_message(receiver_email, receiver_name, code)
+        message = self.__get_info_message(receiver_email, receiver_name, code)
 
         self.__connect_to_smtp_server_and_send_mail(
             server_host='smtp.gmail.com',
@@ -129,8 +153,9 @@ class MailSender:
             receiver_email=receiver_email,
             message=message.as_string(),
         )
-    
-    def send_via_outlook(self, to: str, name: str, code: str, data: dict, **kwargs) -> None:
+
+
+    def send_via_outlook(self, to: str, name: str, code: str, data: dict, message_type: Literal['info', 'delete'], **kwargs) -> None:
         '''
             Envia um email com o código de agendamento utilizando o servidor SMTP do Outlook.\n
 
@@ -138,11 +163,24 @@ class MailSender:
             [name]: nome do destinatário\n
             [code]: código do agendamento, o mesmo código deve ser salvo no banco de dados
         '''
-        receiver_email: str = kwargs.get('to', to)
+
+        receiver_email: Union[str, Email] = kwargs.get('to', to)
+        if isinstance(receiver_email, Email):
+            receiver_email = receiver_email.address
+
         receiver_name: str = kwargs.get('name', name)
         msg_data: dict = kwargs.get('data', data)
 
-        message = self.__get_default_message(receiver_email, receiver_name, code, data=msg_data)
+        messages: dict[str, Callable] = {
+            'info': self.__get_info_message,
+            'delete': self.__get_delete_message 
+        }
+
+        print(message_type, receiver_email, receiver_name, code, msg_data)
+        try:
+            message = messages[message_type](receiver_email, receiver_name, code, data=msg_data)
+        except KeyError as e:
+            raise KeyError('Informe um tipo válido de mensagem.')
 
         self.__connect_to_smtp_server_and_send_mail(
             server_host='smtp-mail.outlook.com',

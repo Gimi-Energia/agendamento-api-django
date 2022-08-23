@@ -3,7 +3,7 @@ from django.db import models
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from agenda_me.utils import EMPRESAS
+from agenda_me.utils.empresas import EMPRESAS
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None):

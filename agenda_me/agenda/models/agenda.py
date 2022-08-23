@@ -6,7 +6,7 @@ from django.db import models
 from agenda.models.agenda_base import AgendaBase
 from agenda.models.periodic_agenda import PeriodicAgenda
 from emails.models import Email
-from agenda_me.utils import MailSender
+from agenda_me.utils.mailSender import MailSender
 
 from dateutil import parser as dateparser
 
@@ -17,7 +17,7 @@ class Agenda(AgendaBase):
     must_repeat = models.BooleanField(default=False, verbose_name="Reunião se repete?", blank=True)
     periodic_agenda = models.ForeignKey(PeriodicAgenda, null=True, blank=True, on_delete=models.CASCADE)
 
-    def send_code_email(self, receiver_email, receiver_name, code, schedule_data):
+    def send_code_email(self, receiver_email, receiver_name, code, message_type, schedule_data=None):
         """Tenta enviar o email com o código de segurança para a pessoa que agendou"""
 
         mail = MailSender(
@@ -29,9 +29,10 @@ class Agenda(AgendaBase):
             to=receiver_email,
             name=receiver_name,
             code=code,
-            data=schedule_data
+            data=schedule_data,
+            message_type=message_type
         )
-        print(f'[!] Code email sended to <{receiver_email}>, from <{mail.sender_email}> at {datetime.now()} [!]')
+        print(f'[!] {str(message_type).upper()} email sended to <{receiver_email}>, from <{mail.sender_email}> at {datetime.now()} [!]')
 
     def save(self, *args, **kwargs):
         if not kwargs.pop('ignore_time_rule', False):
@@ -74,6 +75,7 @@ class Agenda(AgendaBase):
                         receiver_email,
                         receiver_name,
                         code,
+                        'info',
                         schedule_data,
                     )
                 except Exception as e:
@@ -85,3 +87,13 @@ class Agenda(AgendaBase):
                 pass
                 
             super(Agenda, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # envia um email confirmando a exclusão do agendamento
+        self.send_code_email(
+            message_type='delete',
+            receiver_email=self.creator_email,
+            receiver_name=self.created_by,
+            code=self.code
+        )
+        super(Agenda, self).delete(*args, **kwargs)

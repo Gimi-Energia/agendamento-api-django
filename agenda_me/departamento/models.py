@@ -1,6 +1,6 @@
 from django.db import models
 
-from agenda_me.utils import EMPRESAS
+from agenda_me.utils.empresas import EMPRESAS
 
 class Department(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, verbose_name="nome")

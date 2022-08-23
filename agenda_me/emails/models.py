@@ -1,6 +1,6 @@
 from django.db import models
 
-from agenda_me.utils import EMPRESAS
+from agenda_me.utils.empresas import EMPRESAS
 
 class Email(models.Model):
     address = models.EmailField()
