@@ -6,6 +6,7 @@ from unidecode import unidecode
 from salas.models import Sala
 from departamento.models import Department
 from emails.models import Email
+from agenda_me.utils.empresas import EMPRESAS
 
 
 class AgendaBase(models.Model):
@@ -29,6 +30,8 @@ class AgendaBase(models.Model):
     creator_department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, verbose_name="Departamento de quem criou")
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+
+    company = models.CharField(choices=EMPRESAS.CHOICES, max_length=255, default=EMPRESAS.GIMI)
 
     def __str__(self):        
         return "{0}".format(self.titulo)
