@@ -2,8 +2,21 @@ from cProfile import label
 from rest_framework import serializers
 
 from agenda.models.periodic_agenda import Weekdays
+from emails.models import Email
+from departamento.models import Department
 
 from .models import Agenda, PeriodicAgenda
+
+
+class InnerEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Email
+        fields = ['address']
+
+class InnerDepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ['name']
 
 
 class BaseAgendaSerializer(serializers.ModelSerializer):
@@ -17,6 +30,9 @@ class BaseAgendaSerializer(serializers.ModelSerializer):
         allow_null=True,
         required=False,
     )
+
+    creator_email = InnerEmailSerializer()
+    creator_department = InnerDepartmentSerializer()
 
     class Meta:
         abstract = True
