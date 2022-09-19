@@ -11,12 +11,12 @@ from .models import Agenda, PeriodicAgenda
 class InnerEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Email
-        fields = ['address']
+        fields = ['id', 'address']
 
 class InnerDepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class BaseAgendaSerializer(serializers.ModelSerializer):
