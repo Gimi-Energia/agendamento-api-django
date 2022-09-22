@@ -4,8 +4,8 @@ from agenda.models.periodic_agenda import PeriodicAgenda
 from copy import deepcopy
 
 from .serializers import (
-    AgendaNoCodeFieldSerializer,
-    AgendaSerializer,
+    AgendaSerializerPOST,
+    AgendaSerializerGET,
     PeriodicAgendaSerializer,
 )
 from .models import Agenda
@@ -29,7 +29,12 @@ load_dotenv()
 
 class CreateView(generics.ListCreateAPIView):
     queryset = Agenda.objects.all()
-    serializer_class = AgendaSerializer
+
+    def get_serializer_class(self):
+        if (self.request.method == 'POST'):
+            return AgendaSerializerPOST
+        elif (self.request.method == 'GET'):
+            return AgendaSerializerGET
 
     def post(self, request: Request, *args, **kwargs):
         must_repeat: Union[bool, None] = request.data.get("must_repeat", None)
@@ -45,7 +50,7 @@ class CreateView(generics.ListCreateAPIView):
         }
 
         # valida os campos no body da request
-        serializer = AgendaSerializer(data=request.data)
+        serializer = AgendaSerializerPOST(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer_data = deepcopy(serializer.data)
 
@@ -144,7 +149,7 @@ class CreateView(generics.ListCreateAPIView):
             agendas = agendas.filter(date_init__gte=data_inicial).filter(
                 date_init__lte=data_final
             )
-        serializer = AgendaSerializer(agendas, many=True)
+        serializer = AgendaSerializerGET(agendas, many=True)
         return Response(serializer.data)
 
 
@@ -152,13 +157,7 @@ class DetailsView(generics.RetrieveUpdateDestroyAPIView):
     """This class handles the http GET, PUT and DELETE requests."""
 
     queryset = Agenda.objects.all()
-    serializer_class = AgendaSerializer
-
-    # def get_serializer_class(self):
-    #     if self.request.user.is_superuser:
-    #         return AgendaSerializer
-    #     else:
-    #         return AgendaNoCodeFieldSerializer
+    serializer_class = AgendaSerializerGET
 
     def delete(self, request: Request, *args, **kwargs):
         """

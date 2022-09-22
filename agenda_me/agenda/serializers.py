@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from agenda.models.periodic_agenda import Weekdays
 from emails.models import Email
+
 from departamento.models import Department
 
 from .models import Agenda, PeriodicAgenda
@@ -31,13 +32,11 @@ class BaseAgendaSerializer(serializers.ModelSerializer):
         required=False,
     )
 
-    creator_email = InnerEmailSerializer()
-    creator_department = InnerDepartmentSerializer()
-
     class Meta:
         abstract = True
         model = Agenda
         fields = '__all__'
+        
 
     @property
     def errors(self):
@@ -78,16 +77,17 @@ class BaseAgendaSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(error, code=400)
 
 
-class AgendaSerializer(BaseAgendaSerializer):
+class AgendaSerializerGET(BaseAgendaSerializer):
+    creator_email = InnerEmailSerializer()
+    creator_department = InnerDepartmentSerializer()
+
     class Meta(BaseAgendaSerializer.Meta):
         read_only_fields = ('date_created', 'date_modified', 'code')
 
 
-class AgendaNoCodeFieldSerializer(BaseAgendaSerializer):
-    """Igual ao AgendaSerializer, porém não exibe o campo 'code'"""
+class AgendaSerializerPOST(BaseAgendaSerializer):
     class Meta(BaseAgendaSerializer.Meta):
-        read_only_fields = ('date_created', 'date_modified')
-        exclude = ('code',)
+        read_only_fields = ('date_created', 'date_modified', 'code')
 
 
 class PeriodicAgendaSerializer(serializers.ModelSerializer):
