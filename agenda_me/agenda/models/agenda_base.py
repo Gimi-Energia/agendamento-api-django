@@ -17,7 +17,7 @@ class AgendaBase(models.Model):
         unique=False,
         verbose_name="Assunto",
     )
-    sala = models.ForeignKey(Sala, on_delete=models.CASCADE, blank=True, null=True)
+    sala = models.ForeignKey(Sala, on_delete=models.CASCADE, blank=True, null=False)
     code = models.CharField(max_length=255, editable=False, blank=False, null=True, verbose_name="Código de segurança")
     created_by = models.CharField(
         validators=[MinLengthValidator(limit_value=4)],
@@ -26,8 +26,8 @@ class AgendaBase(models.Model):
         blank=False,
         verbose_name="Seu nome"
     )
-    creator_email = models.ForeignKey(Email, on_delete=models.SET_NULL, null=True, blank=False, verbose_name="Email de quem criou")
-    creator_department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, verbose_name="Departamento de quem criou")
+    creator_email = models.ForeignKey(Email, on_delete=models.DO_NOTHING, null=False, blank=False, verbose_name="Email de quem criou")
+    creator_department = models.ForeignKey(Department, on_delete=models.DO_NOTHING, null=False, verbose_name="Departamento de quem criou")
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 

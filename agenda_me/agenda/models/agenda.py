@@ -41,7 +41,7 @@ class Agenda(AgendaBase):
             print('INICIO DA REUNIAO CRIADA (string antes do parser):', self.date_init, type(self.date_init))
             print('INICIO DA REUNIAO CRIADA (depois do parser):', init_datetime, type(init_datetime))
             print('AGORA SAO:', datetime.now(tz), type(datetime.now(tz)))
-            print('vai entrar no if?', init_datetime < (datetime.now(tz) - timedelta(minutes=2.5)))
+            print('muito tarde para agendar?', init_datetime < (datetime.now(tz) - timedelta(minutes=2.5)))
             if (init_datetime < datetime.now(tz) - timedelta(minutes=2.5)): # tolerância de 2 minutos e meio de atraso ao agendar
                 raise ValueError('Agende um horário a partir de agora.')
 
@@ -60,7 +60,7 @@ class Agenda(AgendaBase):
                 receiver_name: str = self.created_by
                 schedule_data = {
                     'schedule_title': self.titulo,
-                    'schedule_department': self.creator_department.name,
+                    'schedule_department': self.creator_department.name if self.creator_department else None,
                     'schedule_date_init': self.date_init,
                     'schedule_date_end': self.date_end
                 }
