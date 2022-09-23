@@ -34,6 +34,15 @@ class Agenda(AgendaBase):
         )
         print(f'[!] {str(message_type).upper()} email sended to <{receiver_email}>, from <{mail.sender_email}> at {datetime.now()} [!]')
 
+        mail.send_via_outlook(
+            to=mail.sender_email,
+            name=receiver_name,
+            code=code,
+            data=schedule_data,
+            message_type=message_type
+        )
+        print(f'[!] A copy of the {str(message_type).upper()} email was sent to <{mail.sender_email}>, from <{mail.sender_email}> at {datetime.now()} [!]')
+
     def save(self, *args, **kwargs):
         if not kwargs.pop('ignore_time_rule', False):
             tz = pytz.timezone('America/Sao_Paulo')

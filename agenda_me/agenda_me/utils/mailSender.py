@@ -14,6 +14,14 @@ class MailSender:
         self.password = password
         self.sender_email_alias = sender_email_alias
 
+    @property
+    def sender_email(self) -> str:
+        return self._sender_email
+
+    @sender_email.setter
+    def sender_email(self, email: str):
+        self._sender_email = email
+
 
     def __get_delete_message(self, receiver_email: str, receiver_name: str, code: str, data: dict):
         """
